@@ -5,8 +5,8 @@ import ida_hexrays
 import PyQt5.QtWidgets
 
 PLUGIN_HOTKEY = 'Shift-T'
-COMMENT       = 'IdaNames automatically renames pseudocode windows with the current function name.'
-WANTED_NAME   = 'IDA names'
+COMMENT       = 'IDA-names automatically renames pseudocode windows with the current function name.'
+WANTED_NAME   = 'IDA-names'
 
 def set_window_title(view, newtitle):
     '''

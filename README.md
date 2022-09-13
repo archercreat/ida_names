@@ -1,10 +1,10 @@
-# IdaNames
+# IDA-names
 
-*IdaNames* automatically renames pseudocode windows with the current function name. It can also rename *ANY* window with `SHIFT-T` hotkey.
+*IDA-names* automatically renames pseudocode windows with the current function name. It can also rename *ANY* window with `SHIFT-T` hotkey.
 
 ## Install
 
-Just drop `idanames.py` in plugins folder. Feel free to change default hotkey as well!
+Just drop `ida_names.py` in plugins folder. Feel free to change default hotkey as well!
 
 ## Showcase
 
