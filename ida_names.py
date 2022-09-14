@@ -38,7 +38,8 @@ class hex_hook(ida_hexrays.Hexrays_Hooks):
         return 0
 
 def rename_window_cb():
-    if view := ida_kernwin.get_current_widget():
+    view = ida_kernwin.get_current_widget()
+    if view is not None:
         title    = ida_kernwin.get_widget_title(view)
         newtitle = ida_kernwin.ask_str(title, 0, "New window title")
         if newtitle is not None and newtitle != "":
