@@ -2,7 +2,7 @@ import ida_funcs
 import ida_idaapi
 import ida_kernwin
 import ida_hexrays
-import PyQt5.QtWidgets
+import ida_name
 
 PLUGIN_HOTKEY = 'Shift-T'
 COMMENT       = 'IDA-names automatically renames pseudocode windows with the current function name.'
@@ -28,14 +28,28 @@ class hex_hook(ida_hexrays.Hexrays_Hooks):
         super().__init__(*args)
 
     def refresh_pseudocode(self, vu: ida_hexrays.vdui_t):
-        fn = ida_funcs.get_func_name(vu.cfunc.entry_ea)
-        set_window_title(vu.ct, fn)
+        self._set_window_title_to_function_name(vu)
         return 0
 
     def switch_pseudocode(self, vu: ida_hexrays.vdui_t):
-        fn = ida_funcs.get_func_name(vu.cfunc.entry_ea)
-        set_window_title(vu.ct, fn)
+        self._set_window_title_to_function_name(vu)
         return 0
+
+    @staticmethod
+    def _set_window_title_to_function_name(vu: ida_hexrays.vdui_t) -> None:
+        function_name = ida_funcs.get_func_name(vu.cfunc.entry_ea)
+        set_window_title(vu.ct, hex_hook._demangle_name(function_name))
+
+    @staticmethod
+    def _demangle_name(name: str) -> str:
+        demangled_name = ida_name.demangle_name(name, ida_name.MNG_SHORT_FORM)
+        if not demangled_name:
+            # IDA's demangler returns an empty string for non-mangled names
+            return name
+
+        # Avoid excessively long names by removing the arguments
+        return demangled_name.split('(')[0]
+
 
 def rename_window_cb():
     view = ida_kernwin.get_current_widget()
