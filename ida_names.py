@@ -61,18 +61,19 @@ def rename_window_cb():
 
 class ida_names(ida_idaapi.plugin_t):
     def __init__(self):
-        self.flags       = ida_idaapi.PLUGIN_KEEP
-        self.comment     = COMMENT
-        self.help        = COMMENT
-        self.wanted_name = WANTED_NAME
-        self.hotkey      = None
+        self.flags          = ida_idaapi.PLUGIN_KEEP
+        self.comment        = COMMENT
+        self.help           = COMMENT
+        self.wanted_name    = WANTED_NAME
+        self.wanted_hotkey  = ''
+        self.hotkey_context = None
 
     def init(self):
         self.hexrays_hook = hex_hook()
         self.hexrays_hook.hook()
         # Add hotkey
-        self.hotkey = ida_kernwin.add_hotkey(PLUGIN_HOTKEY, rename_window_cb)
-        if self.hotkey is None:
+        self.hotkey_context = ida_kernwin.add_hotkey(PLUGIN_HOTKEY, rename_window_cb)
+        if self.hotkey_context is None:
             ida_kernwin.msg(f'Failed to register {PLUGIN_HOTKEY} hotkey')
         return ida_idaapi.PLUGIN_KEEP
 
@@ -85,8 +86,8 @@ class ida_names(ida_idaapi.plugin_t):
 
     def term(self):
         self.hexrays_hook.unhook()
-        if self.hotkey is not None:
-            ida_kernwin.del_hotkey(self.hotkey)
+        if self.hotkey_context is not None:
+            ida_kernwin.del_hotkey(self.hotkey_context)
 
 def PLUGIN_ENTRY():
     return ida_names()
